@@ -9,11 +9,11 @@ This is a repository containing all my [Wemos D1 mini](https://wiki.wemos.cc/pro
 
 Use the [ampy](https://learn.adafruit.com/micropython-basics-load-files-and-run-code/install-ampy) tool to upload the project files:
 
-    ```shell
-    ampy --port /dev/tty.YOURUSBDEVICE put path/to/file.py
-    ```
+```shell
+ampy --port /dev/tty.YOURUSBDEVICE put path/to/file.py
+```
 
-    where `/dev/tty.YOURUSBDEVICE` is the absolute path to the serial interface of your Wemos device and `path/to/file.py` is the relative path to the file you want to upload.
+where `/dev/tty.YOURUSBDEVICE` is the absolute path to the serial interface of your Wemos device and `path/to/file.py` is the relative path to the file you want to upload.
 
 
 ## Setup MicroPython
