@@ -1,4 +1,4 @@
-# Wemos Projects
+# ESP8266/Wemos Projects
 
 This is a repository containing all my [Wemos D1 mini](https://wiki.wemos.cc/products:d1:d1_mini) projects.
 
