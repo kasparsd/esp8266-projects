@@ -26,7 +26,7 @@ Wemos D1 mini boards have Micropython installed by default. To update the Microp
     pip install esptool
     ```
 
-2. Download the [latest firmware binary `.bin` for ESP8266 boards](http://micropython.org/download#esp8266) from the official Micropython website and save it in the `firmware` directory.
+2. Download the [latest firmware binary `.bin` for ESP8266 boards](https://micropython.org/download#esp8266) from the official Micropython website and save it in the `firmware` directory.
 
 3. Finally, upload the firmware: 
 
