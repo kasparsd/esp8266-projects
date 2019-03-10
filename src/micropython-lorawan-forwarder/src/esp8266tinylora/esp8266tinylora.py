@@ -245,7 +245,7 @@ class TinyLoRa:
         # wait for RFM to enter standby mode
         time.sleep(0.01)
         # switch interrupt to txdone
-        self._write_u8(0x40, 0x40)
+        self._write_u8(_REG_DIO_MAPPING_1, 0x40)
         # check for multi-channel configuration
         if self._channel is None:
             self._tx_random = 1 # TODO randint(0, 7)
