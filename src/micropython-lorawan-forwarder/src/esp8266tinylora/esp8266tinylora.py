@@ -240,11 +240,9 @@ class TinyLoRa:
           :param int packet_length: length of LoRa packet to send
           :param int timeout: TxDone wait time.
         """
-        # Set RFM to standby
+        # Set RFM to standby to enable loading FIFO.
         self._write_u8(_REG_OPERATING_MODE, _MODE_STDBY)
-        # wait for RFM to enter standby mode
-        time.sleep(0.01)
-        # switch interrupt to txdone
+        # Set the IRQ mapping DIO0=TxDone DIO1=NOP DIO2=NOP
         self._write_u8(_REG_DIO_MAPPING_1, 0x40)
         # check for multi-channel configuration
         if self._channel is None:
