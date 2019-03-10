@@ -189,7 +189,7 @@ class TinyLoRa:
         self._ttn_config = ttn_config
 
     def on_irq(self, pin):
-        print(pin.value())
+        print('IRQ received', pin.value())
 
     def send_data(self, data, data_length, frame_counter, timeout=2):
         """Function to assemble and send data
