@@ -267,7 +267,7 @@ class TinyLoRa:
         # wait for TxDone IRQ, poll for timeout.
         start = time.monotonic()
         timed_out = False
-        while not timed_out and not True: # TODO wait for trigger self._irq.value
+        while not timed_out: # TODO wait for trigger self._irq.value
             if(time.monotonic() - start) >= timeout:
                 timed_out = True
         # switch RFM to sleep operating mode
