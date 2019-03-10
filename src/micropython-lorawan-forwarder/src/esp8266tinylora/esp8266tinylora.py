@@ -261,16 +261,10 @@ class TinyLoRa:
             self._write_u8(0x00, lora_packet[k])
         # switch RFM to TX operating mode
         self._write_u8(_REG_OPERATING_MODE, _MODE_TX)
-        # wait for TxDone IRQ, poll for timeout.
-        start = time.monotonic()
-        timed_out = False
-        while not timed_out: # TODO wait for trigger self._irq.value
-            if(time.monotonic() - start) >= timeout:
-                timed_out = True
+        # TODO: wait for TxDone IRQ, poll for timeout.
+        time.sleep(1)
         # switch RFM to sleep operating mode
         self._write_u8(_REG_OPERATING_MODE, _MODE_SLEEP)
-        if timed_out:
-            raise RuntimeError('Timeout during packet send')
 
     def set_datarate(self, datarate):
         """Sets the RFM Datarate
