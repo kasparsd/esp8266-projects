@@ -39,7 +39,7 @@ Implementation Notes
 """
 
 import time
-from random import randint
+#from random import randint # TODO
 from micropython import const
 from machine import SPI, Pin
 
@@ -170,7 +170,7 @@ class TinyLoRa:
             raise TypeError("Country Code Incorrect/Unsupported")
         # Set Channel Number
         self._channel = channel
-        self._tx_random = randint(0, 7)
+        self._tx_random = 1 # TODO randint(0, 7)
         if self._channel is not None:
             # set single channel
             self.set_channel(self._channel)
@@ -243,7 +243,7 @@ class TinyLoRa:
         self._write_u8(0x40, 0x40)
         # check for multi-channel configuration
         if self._channel is None:
-            self._tx_random = randint(0, 7)
+            self._tx_random = 1 # TODO randint(0, 7)
             self._rfm_lsb = self._frequencies[self._tx_random][2]
             self._rfm_mid = self._frequencies[self._tx_random][1]
             self._rfm_msb = self._frequencies[self._tx_random][0]
