@@ -135,7 +135,8 @@ class TinyLoRa:
         :param TTN ttn_config: TTN Configuration.
         :param int channel: Frequency Channel.
         """
-        #self._irq = Pin.irq(trigger=Pin.IRQ_RISING) # TODO, define callback
+        self._irq = Pin(15, Pin.IN) # TODO, define callback
+        self._irq.irq(trigger=Pin.IRQ_RISING, handler=self.on_irq)
 
         # Set up SPI Device on Mode 0
         self._device = SPI(1, baudrate=4000000, polarity=0, phase=0)
@@ -187,6 +188,9 @@ class TinyLoRa:
             self._write_u8(pair[0], pair[1])
         # Give the lora object ttn configuration
         self._ttn_config = ttn_config
+
+    def on_irq(self, pin):
+        print(pin.value())
 
     def send_data(self, data, data_length, frame_counter, timeout=2):
         """Function to assemble and send data
