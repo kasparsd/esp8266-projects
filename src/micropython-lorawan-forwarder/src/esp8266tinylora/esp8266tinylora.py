@@ -125,7 +125,7 @@ class TinyLoRa:
     """TinyLoRa Interface
     """
     # SPI Write Buffer
-    _BUFFER = bytearray(1)
+    _BUFFER = bytearray(2)
 
     # pylint: disable=too-many-arguments
     def __init__(self, ttn_config, channel=None):
