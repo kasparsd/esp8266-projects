@@ -127,20 +127,15 @@ class TinyLoRa:
     _BUFFER = bytearray(2)
 
     # pylint: disable=too-many-arguments
-    def __init__(self, spi, cs, irq, ttn_config, channel=None):
+    def __init__(self, ttn_config, channel=None):
         """Interface for a HopeRF RFM95/6/7/8(w) radio module. Sets module up for sending to
         The Things Network.
 
-        :param ~busio.SPI spi: The SPI bus the device is on
-        :param ~digitalio.DigitalInOut cs: Chip select pin (RFM_NSS)
-        :param ~digitalio.DigitalInOut irq: RFM's DIO0 Pin (RFM_DIO0)
         :param TTN ttn_config: TTN Configuration.
         :param int channel: Frequency Channel.
         """
-        self._irq = irq
-        self._irq.switch_to_input()
-        self._cs = cs
-        self._cs.switch_to_output()
+        self._irq = Pin.irq()
+
         # Set up SPI Device on Mode 0
         self._device = SPI(baudrate=4000000)
 
@@ -266,7 +261,7 @@ class TinyLoRa:
         # wait for TxDone IRQ, poll for timeout.
         start = time.monotonic()
         timed_out = False
-        while not timed_out and not self._irq.value:
+        while not timed_out and not True: # TODO wait for trigger self._irq.value
             if(time.monotonic() - start) >= timeout:
                 timed_out = True
         # switch RFM to sleep operating mode
