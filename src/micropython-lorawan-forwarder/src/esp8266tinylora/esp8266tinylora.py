@@ -241,7 +241,7 @@ class TinyLoRa:
           :param int timeout: TxDone wait time.
         """
         # Set RFM to standby
-        self._write_u8(_MODE_STDBY, 0x81)
+        self._write_u8(_REG_OPERATING_MODE, _MODE_STDBY)
         # wait for RFM to enter standby mode
         time.sleep(0.01)
         # switch interrupt to txdone
