@@ -41,8 +41,9 @@ Implementation Notes
 import time
 from random import randint
 from micropython import const
-from adafruit_tinylora.adafruit_tinylora_encryption import AES
 from machine import SPI, Pin
+
+from esp8266-tinylora.adafruit_tinylora_encryption import AES
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_TinyLoRa.git"
