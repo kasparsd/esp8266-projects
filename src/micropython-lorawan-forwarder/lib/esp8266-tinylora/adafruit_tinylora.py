@@ -41,8 +41,8 @@ Implementation Notes
 import time
 from random import randint
 from micropython import const
-import adafruit_bus_device.spi_device
 from adafruit_tinylora.adafruit_tinylora_encryption import AES
+from machine import SPI, Pin
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_TinyLoRa.git"
@@ -142,8 +142,8 @@ class TinyLoRa:
         self._cs = cs
         self._cs.switch_to_output()
         # Set up SPI Device on Mode 0
-        self._device = adafruit_bus_device.spi_device.SPIDevice(spi, self._cs, baudrate=4000000,
-                                                                polarity=0, phase=0)
+        self._device = SPI(baudrate=4000000)
+
         # Verify the version of the RFM module
         self._version = self._read_u8(_REG_VERSION)
         if self._version != 18:
@@ -293,13 +293,12 @@ class TinyLoRa:
         """
         self._rfm_msb, self._rfm_mid, self._rfm_lsb = self._frequencies[channel]
 
-    def _read_into(self, address, buf, length=None):
+    def _read_into(self, address, buf):
         """Read a number of bytes from the specified address into the
         provided buffer. If length is not specified (default) the entire buffer
         will be filled.
         :param bytearray address: Register Address.
         :param bytearray buf: Data Buffer for bytes.
-        :param int length: Buffer length.
         """
         if length is None:
             length = len(buf)
@@ -307,14 +306,14 @@ class TinyLoRa:
             # Strip out top bit to set 0 value (read).
             self._BUFFER[0] = address & 0x7F
             # pylint: disable=no-member
-            device.write(self._BUFFER, end=1)
-            device.readinto(buf, end=length)
+            device.write(self._BUFFER)
+            device.readinto(buf)
 
     def _read_u8(self, address):
         """Read a single byte from the provided address and return it.
         :param bytearray address: Register Address.
         """
-        self._read_into(address, self._BUFFER, length=1)
+        self._read_into(address, self._BUFFER)
         return self._BUFFER[0]
 
     def _write_u8(self, address, val):
@@ -326,4 +325,4 @@ class TinyLoRa:
             self._BUFFER[0] = (address | 0x80)  # MSB 1 to Write
             self._BUFFER[1] = val
             # pylint: disable=no-member
-            device.write(self._BUFFER, end=2)
+            device.write(self._BUFFER)
