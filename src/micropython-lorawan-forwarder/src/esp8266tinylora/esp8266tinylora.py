@@ -172,7 +172,6 @@ class TinyLoRa:
             raise TypeError("Country Code Incorrect/Unsupported")
         # Set Channel Number
         self._channel = channel
-        self._tx_random = 0 # TODO randint(0, 7)
         if self._channel is not None:
             # set single channel
             self.set_channel(self._channel)
