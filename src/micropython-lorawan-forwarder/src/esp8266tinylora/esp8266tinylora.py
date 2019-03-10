@@ -312,7 +312,7 @@ class TinyLoRa:
         :param bytearray address: Register Address.
         """
         self._read_into(address, self._BUFFER)
-        return self._BUFFER[0]
+        return self._BUFFER[0] # TODO: Should this be self._BUFFER[1] instead?
 
     def _write_u8(self, address, val):
         """Writes to the RFM register given an address and data.
