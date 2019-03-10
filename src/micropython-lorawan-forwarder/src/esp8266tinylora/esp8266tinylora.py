@@ -172,7 +172,7 @@ class TinyLoRa:
             raise TypeError("Country Code Incorrect/Unsupported")
         # Set Channel Number
         self._channel = channel
-        self._tx_random = 1 # TODO randint(0, 7)
+        self._tx_random = 0 # TODO randint(0, 7)
         if self._channel is not None:
             # set single channel
             self.set_channel(self._channel)
@@ -248,7 +248,7 @@ class TinyLoRa:
         self._write_u8(_REG_DIO_MAPPING_1, 0x40)
         # check for multi-channel configuration
         if self._channel is None:
-            self._tx_random = 1 # TODO randint(0, 7)
+            self._tx_random = 0 # TODO randint(0, 7)
             self._rfm_lsb = self._frequencies[self._tx_random][2]
             self._rfm_mid = self._frequencies[self._tx_random][1]
             self._rfm_msb = self._frequencies[self._tx_random][0]
