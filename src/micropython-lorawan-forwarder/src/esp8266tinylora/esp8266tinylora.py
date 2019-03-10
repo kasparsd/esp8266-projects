@@ -139,7 +139,7 @@ class TinyLoRa:
 
         # Set up SPI Device on Mode 0
         self._device = SPI(1, baudrate=4000000, polarity=0, phase=0)
-        self._cs = cs = Pin(16, Pin.OUT)
+        self._cs = Pin(16, Pin.OUT)
 
         # Verify the version of the RFM module
         self._version = self._read_u8(_REG_VERSION)
