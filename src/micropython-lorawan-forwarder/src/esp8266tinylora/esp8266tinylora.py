@@ -125,7 +125,7 @@ class TinyLoRa:
     """TinyLoRa Interface
     """
     # SPI Write Buffer
-    _BUFFER = bytearray(2)
+    _BUFFER = bytearray(1)
 
     # pylint: disable=too-many-arguments
     def __init__(self, ttn_config, channel=None):
@@ -135,10 +135,11 @@ class TinyLoRa:
         :param TTN ttn_config: TTN Configuration.
         :param int channel: Frequency Channel.
         """
-        self._irq = Pin.irq()
+        #self._irq = Pin.irq(trigger=Pin.IRQ_RISING) # TODO, define callback
 
         # Set up SPI Device on Mode 0
-        self._device = SPI(baudrate=4000000)
+        self._device = SPI(1, baudrate=4000000, polarity=0, phase=0)
+        self._cs = cs = Pin(16, Pin.OUT)
 
         # Verify the version of the RFM module
         self._version = self._read_u8(_REG_VERSION)
@@ -155,16 +156,16 @@ class TinyLoRa:
         self.set_datarate("SF7BW125")
         # Set regional frequency plan
         if 'US' in ttn_config.country:
-            from adafruit_tinylora.ttn_usa import TTN_FREQS
+            from esp8266tinylora.ttn_usa import TTN_FREQS
             self._frequencies = TTN_FREQS
         elif ttn_config.country == 'AS':
-            from adafruit_tinylora.ttn_as import TTN_FREQS
+            from esp8266tinylora.ttn_as import TTN_FREQS
             self._frequencies = TTN_FREQS
         elif ttn_config.country == 'AU':
-            from adafruit_tinylora.ttn_au import TTN_FREQS
+            from esp8266tinylora.ttn_au import TTN_FREQS
             self._frequencies = TTN_FREQS
         elif ttn_config.country == 'EU':
-            from adafruit_tinylora.ttn_eu import TTN_FREQS
+            from esp8266tinylora.ttn_eu import TTN_FREQS
             self._frequencies = TTN_FREQS
         else:
             raise TypeError("Country Code Incorrect/Unsupported")
@@ -291,19 +292,16 @@ class TinyLoRa:
 
     def _read_into(self, address, buf):
         """Read a number of bytes from the specified address into the
-        provided buffer. If length is not specified (default) the entire buffer
-        will be filled.
+        provided buffer.
         :param bytearray address: Register Address.
         :param bytearray buf: Data Buffer for bytes.
         """
-        if length is None:
-            length = len(buf)
-        with self._device as device:
-            # Strip out top bit to set 0 value (read).
-            self._BUFFER[0] = address & 0x7F
-            # pylint: disable=no-member
-            device.write(self._BUFFER)
-            device.readinto(buf)
+        # Strip out top bit to set 0 value (read).
+        self._BUFFER[0] = address & 0x7F
+        self._cs.off()
+        self._device.write(self._BUFFER)
+        self._device.readinto(buf)
+        self._cs.on()
 
     def _read_u8(self, address):
         """Read a single byte from the provided address and return it.
@@ -317,8 +315,8 @@ class TinyLoRa:
         :param bytearray address: Register Address.
         :param val: Data to write.
         """
-        with self._device as device:
-            self._BUFFER[0] = (address | 0x80)  # MSB 1 to Write
-            self._BUFFER[1] = val
-            # pylint: disable=no-member
-            device.write(self._BUFFER)
+        self._BUFFER[0] = (address | 0x80)  # MSB 1 to Write
+        self._BUFFER[1] = val
+        self._cs.off()
+        self._device.write(self._BUFFER)
+        self._cs.on()
